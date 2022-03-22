@@ -1,8 +1,9 @@
 const express = require('express');
 const fs = require('fs').promises;
 
-const authMiddleware = require('../middleware/authMiddleware');
+// const authMiddleware = require('../middleware/authMiddleware');
 const tokenMiddleware = require('../middleware/tokenMiddleware');
+const nameTalkerMiddleware = require('../middleware/nameTalkerMiddleware');
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', tokenMiddleware, (req, res) => {
+router.post('/', tokenMiddleware, nameTalkerMiddleware, (req, res) => {
   const { name, age, talk } = req.body;
   try {
     fs.readFile('./talker.json', 'utf8')
