@@ -9,8 +9,8 @@ function readFileFunc(path) {
       return data;
     })
     .catch((err) => {
-      console.log(`Não foi possível ler arquivo. Erro: ${err.message}`);
-      return { message: `Erro no app: ${err.message}` };
+      console.error(`Não foi possível ler arquivo. Erro: ${err.message}`);
+      return { messageError: `Erro no app: ${err.message}` };
     });
 }
 
