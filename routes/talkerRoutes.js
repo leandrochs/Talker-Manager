@@ -9,6 +9,7 @@ const watchedAtMiddleware = require('../middleware/watchedAtMiddleware');
 const rateMiddleware = require('../middleware/rateMiddleware');
 
 const postTalkerController = require('../controllers/postTalkerController');
+const getTalkerIdController = require('../controllers/getTalkerIdController');
 
 const router = express.Router();
 
@@ -18,26 +19,7 @@ router.get('/', (req, res) => {
     .then((data) => res.status(200).json(data));
 });
 
-router.get('/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    fs.readFile('./talker.json', 'utf8')
-      .then((json) => JSON.parse(json))
-      .then((talkers) =>
-        talkers.find((talker) => talker.id === parseInt(id, 10)))
-      .then((talker) => {
-        if (!talker) {
-          return res
-            .status(404)
-            .json({ message: 'Pessoa palestrante não encontrada' });
-        }
-        res.status(200).json(talker);
-      });
-  } catch (error) {
-    console.error(error);
-    res.status(404).json({ message: 'Erro no app.' });
-  }
-});
+router.get('/:id', getTalkerIdController);
 
 router.post(
   '/',
