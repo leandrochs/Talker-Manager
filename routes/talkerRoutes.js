@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs').promises;
 
 const tokenMiddleware = require('../middleware/tokenMiddleware');
 const nameTalkerMiddleware = require('../middleware/nameTalkerMiddleware');
@@ -11,12 +10,24 @@ const rateMiddleware = require('../middleware/rateMiddleware');
 const getTalkersController = require('../controllers/getTalkersController');
 const getTalkerIdController = require('../controllers/getTalkerIdController');
 const postTalkerController = require('../controllers/postTalkerController');
+const putTalkerIdController = require('../controllers/putTalkerIdController');
 
 const router = express.Router();
 
 router.get('/', getTalkersController);
 
 router.get('/:id', getTalkerIdController);
+
+router.put(
+  '/:id',
+  tokenMiddleware,
+  nameTalkerMiddleware,
+  ageTalkerMiddleware,
+  talkMiddleware,
+  watchedAtMiddleware,
+  rateMiddleware,
+  putTalkerIdController,
+);
 
 router.post(
   '/',
