@@ -8,16 +8,13 @@ const talkMiddleware = require('../middleware/talkMiddleware');
 const watchedAtMiddleware = require('../middleware/watchedAtMiddleware');
 const rateMiddleware = require('../middleware/rateMiddleware');
 
-const postTalkerController = require('../controllers/postTalkerController');
+const getTalkersController = require('../controllers/getTalkersController');
 const getTalkerIdController = require('../controllers/getTalkerIdController');
+const postTalkerController = require('../controllers/postTalkerController');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  fs.readFile('./talker.json', 'utf8')
-    .then((json) => JSON.parse(json))
-    .then((data) => res.status(200).json(data));
-});
+router.get('/', getTalkersController);
 
 router.get('/:id', getTalkerIdController);
 
