@@ -11,6 +11,7 @@ const getTalkersController = require('../controllers/getTalkersController');
 const getTalkerIdController = require('../controllers/getTalkerIdController');
 const postTalkerController = require('../controllers/postTalkerController');
 const putTalkerIdController = require('../controllers/putTalkerIdController');
+const deleteTalkerIdController = require('../controllers/deleteTalkerIdController');
 
 const router = express.Router();
 
@@ -27,6 +28,12 @@ router.put(
   watchedAtMiddleware,
   rateMiddleware,
   putTalkerIdController,
+);
+
+router.delete(
+  '/:id',
+  tokenMiddleware,
+  deleteTalkerIdController,
 );
 
 router.post(
