@@ -1,20 +1,18 @@
-const fs = require('fs').promises;
+const readFileFunc = require('../services/readFileFunc');
 
-function getTalkerIdController(req, res) {
+async function getTalkerIdController(req, res) {
   try {
     const { id } = req.params;
-    fs.readFile('./talker.json', 'utf8')
-      .then((json) => JSON.parse(json))
-      .then((talkers) =>
-        talkers.find((talker) => talker.id === parseInt(id, 10)))
-      .then((talker) => {
-        if (!talker) {
-          return res
-            .status(404)
-            .json({ message: 'Pessoa palestrante não encontrada' });
-        }
-        res.status(200).json(talker);
-      });
+    const data = await readFileFunc('./talker.json');
+    const talkerFound = data.find((talker) => talker.id === parseInt(id, 10));
+
+    if (!talkerFound) {
+      return res
+        .status(404)
+        .json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    res.status(200).json(talkerFound);
   } catch (error) {
     console.error(error);
     res.status(404).json({ message: 'Erro no app.' });
