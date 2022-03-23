@@ -1,19 +1,20 @@
 const fs = require('fs').promises;
+const readFileFunc = require('../services/readFileFunc');
 
-function deleteTalkerIdController(req, res) {
-  const id = parseInt(req.params.id, 10);
+async function deleteTalkerIdController(req, res) {
   try {
-    fs.readFile('./talker.json', 'utf8')
-      .then((json) => JSON.parse(json))
-      .then((talkers) => {
-        const oldTalkers = talkers.filter((talker) => talker.id !== id);
-        fs.writeFile('./talker.json', JSON.stringify(oldTalkers), 'utf8')
-          .then(() => res.sendStatus(204))
-          .catch((err) =>
-            res
-              .status(400)
-              .json({ message: `Arquivo não escrito: ${err.message}` }));
-      });
+    const id = parseInt(req.params.id, 10);
+    const data = await readFileFunc('./talker.json');
+
+    if (data.messageError) {
+      return res.status(400).json({ message: data.messageError });
+    }
+
+    const maintainedTalkers = data.filter((talker) => talker.id !== id);
+
+    fs.writeFile('./talker.json', JSON.stringify(maintainedTalkers), 'utf8')
+      .then(() => res.sendStatus(204))
+      .catch(() => res.status(400));
   } catch (error) {
     res.status(401).json({ message: `Erro no app: ${error}` });
   }

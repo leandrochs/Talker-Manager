@@ -1,23 +1,23 @@
-const fs = require('fs').promises;
+const readFileFunc = require('../services/readFileFunc');
 
-function searchNameController(req, res) {
+async function searchNameController(req, res) {
   try {
     const { q } = req.query;
-    console.log(q);
-    fs.readFile('./talker.json', 'utf8')
-      .then((json) => JSON.parse(json))
-      .then((talkers) => talkers.filter(({ name }) => name.indexOf(q) !== -1))
-      .then((talker) => {
-        if (!talker) {
-          return res
-            .status(404)
-            .json({ message: 'Pessoa palestrante não encontrada' });
-        }
-        res.status(200).json(talker);
-      });
+    const data = await readFileFunc('./talker.json');
+
+    if (data.messageError) return res.status(400).json({ message: data.messageError });
+
+    const talkersFound = data.filter(({ name }) => name.indexOf(q) !== -1);
+
+    if (!talkersFound) {
+      return res
+        .status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    res.status(200).json(talkersFound);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ message: 'Erro no app.' });
+    res.status(404).json({ message: `Erro no app: ${error.message}` });
   }
 }
 
