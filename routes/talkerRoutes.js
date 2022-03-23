@@ -17,33 +17,22 @@ const searchNameController = require('../controllers/searchNameController');
 const router = express.Router();
 
 router.get('/search', tokenMiddleware, searchNameController);
-
 router.get('/', getTalkersController);
-
 router.get('/:id', getTalkerIdController);
 
-router.put(
-  '/:id',
-  tokenMiddleware,
+router.use(tokenMiddleware);
+
+router.delete('/:id', deleteTalkerIdController);
+
+router.use(
   nameTalkerMiddleware,
   ageTalkerMiddleware,
   talkMiddleware,
   watchedAtMiddleware,
   rateMiddleware,
-  putTalkerIdController,
 );
 
-router.delete('/:id', tokenMiddleware, deleteTalkerIdController);
-
-router.post(
-  '/',
-  tokenMiddleware,
-  nameTalkerMiddleware,
-  ageTalkerMiddleware,
-  talkMiddleware,
-  watchedAtMiddleware,
-  rateMiddleware,
-  postTalkerController,
-);
+router.put('/:id', putTalkerIdController);
+router.post('/', postTalkerController);
 
 module.exports = router;
