@@ -1,9 +1,13 @@
-const fs = require('fs').promises;
+const readFileFunc = require('../services/readFileFunc');
 
-function getTalkersController(req, res) {
-  fs.readFile('./talker.json', 'utf8')
-    .then((json) => JSON.parse(json))
-    .then((data) => res.status(200).json(data));
+async function getTalkersController(req, res) {
+  try {
+    const data = await readFileFunc('./talker.json');
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(`Não foi possível ler arquivo. Erro: ${error.message}`);
+    return res.status(401).json({ message: `Erro no app: ${error}` });
+  }
 }
 
 module.exports = getTalkersController;
