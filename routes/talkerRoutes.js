@@ -12,8 +12,11 @@ const getTalkerIdController = require('../controllers/getTalkerIdController');
 const postTalkerController = require('../controllers/postTalkerController');
 const putTalkerIdController = require('../controllers/putTalkerIdController');
 const deleteTalkerIdController = require('../controllers/deleteTalkerIdController');
+const searchNameController = require('../controllers/searchNameController');
 
 const router = express.Router();
+
+router.get('/search', tokenMiddleware, searchNameController);
 
 router.get('/', getTalkersController);
 
@@ -30,11 +33,7 @@ router.put(
   putTalkerIdController,
 );
 
-router.delete(
-  '/:id',
-  tokenMiddleware,
-  deleteTalkerIdController,
-);
+router.delete('/:id', tokenMiddleware, deleteTalkerIdController);
 
 router.post(
   '/',
